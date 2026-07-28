@@ -5,16 +5,17 @@
 */
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Command_MoveForward", menuName = "Scriptable Objects/Command/MoveForward")]
 public class Command_MoveForward : CommandComponent
 {
-    public override bool Command()
+    public override bool Command(CommandPlayer owner)
     {
-        base.Command();
+        base.Command(owner);
 
-        Transform block = GetComponentInParent<Block>()?.transform;
+        Transform block = owner?.transform;
         if(block != null )
         {
-            block.position += transform.forward;
+            block.position += block.forward;
         }
 
         return true;

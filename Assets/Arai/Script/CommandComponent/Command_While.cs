@@ -6,34 +6,59 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Command_While", menuName = "Scriptable Objects/Command/While")]
 public class Command_While : CommandComponent
 {
-    private int _commandCursor;
+    // ==================================================
+    // ----- Cursor -----
+    // ==================================================
+    private int _commandCursor = 0;
+
+    // ==================================================
+    // ----- Loop Commands -----
+    // ==================================================
     [SerializeField] private List<CommandComponent> _inCommands;
 
 
-
-    public override bool Command()
+    // ==================================================
+    // ----- Public Events -----
+    // ==================================================
+    public override void Initialize()
     {
-        base.Command();
+        base.Initialize();
+        _commandCursor = 0;
+        foreach (var command in _inCommands)
+        {
+            command.Initialize();
+        }
+    }
+
+    public override void Enter()
+    {
+        base.Enter();
+    }
+
+    public override bool Command(CommandPlayer owner)
+    {
+        base.Command(owner);
 
 
         int commandCount = _inCommands.Count;
 
 
         // チェック
-        if(commandCount <= 0)
+        if(commandCount <= 0 || _commandCursor >= commandCount)
         {
             return false;
         }
 
         // コマンドを実行
         // コマンドがnullだったら強制的に次のコマンドに移行する
-        bool next = _inCommands[_commandCursor]?.Command() ?? true;
+        bool next = _inCommands[_commandCursor]?.Command(owner) ?? true;
 
 
         // カーソルを次に進める
-        if(next == true)
+        if (next == true)
         {
             _commandCursor++;
 

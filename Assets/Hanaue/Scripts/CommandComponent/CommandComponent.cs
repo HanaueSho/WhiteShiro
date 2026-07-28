@@ -6,11 +6,26 @@
 */
 using UnityEngine;
 
-public class CommandComponent : MonoBehaviour
+public class CommandComponent : ScriptableObject
 {
-    public virtual bool Command()
+    public virtual void Initialize()
+    {
+        // コマンドの初期化
+    }
+
+    public virtual void Enter()
+    {
+        // リアクションを呼ぶ
+    }
+
+    public virtual bool Command(CommandPlayer owner)
     {
         Debug.Log($"{GetType()}");
         return true;
+    }
+
+    public virtual void Exit()
+    {
+        // リアクションを呼ぶ
     }
 }

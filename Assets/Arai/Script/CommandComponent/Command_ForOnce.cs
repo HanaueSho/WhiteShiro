@@ -5,6 +5,7 @@
 */
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "Command_ForOnce", menuName = "Scriptable Objects/Command/ForOnce")]
 public class Command_ForOnce : Command_While
 {
     protected override bool OnLoopEnd()
