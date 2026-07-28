@@ -11,25 +11,61 @@ using UnityEngine;
 
 public class CommandPlayer : MonoBehaviour
 {
+    // ==================================================
+    // ----- Priority -----
+    // ==================================================
     [SerializeField] private ScenePlayer.CommandPlayerPriority _priority = ScenePlayer.CommandPlayerPriority.Default;
     public ScenePlayer.CommandPlayerPriority Priority => _priority;
 
-    // コマンドコンポーネントのリストを持つ
-    // カーソルを持つ
+    // ==================================================
+    // ----- Base Command -----
+    // ==================================================
     [SerializeField] private CommandComponent _baseCommand;
 
-    // 関数でカーソルが指すリストのアクションを実行する＋カーソルを動かす
-    // ↑こいつを ScenePlayer が呼ぶ
+    // ==================================================
+    // ----- Public Propaty -----
+    // ==================================================
+    public bool IsPlaying { get; private set; }
 
+
+    // ==================================================
+    // ----- Unity Events -----
+    // ==================================================
     private void Start()
     {
         // CommandComponent を登録
         ScenePlayer.Instance.Register(this);
     }
 
+    // ==================================================
+    // ----- Public Events -----
+    // ==================================================
     public void PlayCommand()
     {
+        if (!IsPlaying)
+        {
+            return;
+        }
+
+        // Command 実行
         Debug.Log($"{GetType()} : {_priority}");
-        _baseCommand.Command();
+
+        // Enter
+        _baseCommand?.Enter();
+        // Commnad
+        if (_baseCommand?.Command(this) ?? true)
+        {
+            // Command が true を返したら実行を止める
+            IsPlaying = false;
+        }
+        // Exit
+        _baseCommand?.Exit();
+
+    }
+
+    public void StartCommand()
+    {
+        IsPlaying = true;
+        _baseCommand.Initialize();
     }
 }

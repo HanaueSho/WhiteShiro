@@ -1,8 +1,9 @@
-/*
+Ôªø/*
     ScenePlayer.cs
     20260728  hanaue sho
     
 */
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -26,9 +27,10 @@ public class ScenePlayer : MonoBehaviour
     }
 
     // ==================================================
-    // ----- Abilities -----
+    // ----- Commands -----
     // ==================================================
     private Dictionary<CommandPlayerPriority, List<CommandPlayer>> _commandPlayers;
+
     private List<CommandPlayer> _defaults;
 
 
@@ -47,13 +49,13 @@ public class ScenePlayer : MonoBehaviour
     // ==================================================
     public void Register(CommandPlayer player)
     {
-        // null É`ÉFÉbÉN
+        // null „ÉÅ„Çß„ÉÉ„ÇØ
         if (player == null)
         {
             return;
         }
 
-        // Default É`ÉFÉbÉN
+        // Default „ÉÅ„Çß„ÉÉ„ÇØ
         CommandPlayerPriority priority = player.Priority;
         if (priority == CommandPlayerPriority.Default)
         {
@@ -61,7 +63,7 @@ public class ScenePlayer : MonoBehaviour
             return;
         }
 
-        // äiî[
+        // Ê†ºÁ¥ç
         if (_commandPlayers.TryGetValue(priority, out var list))
         {
             list.Add(player);
@@ -76,13 +78,28 @@ public class ScenePlayer : MonoBehaviour
 
     public void OnPlay()
     {
-        Play();
+        StartCoroutine(Play());
+    }
+
+    public void OnRun()
+    {
+        // Start
+        foreach(var commandPlayerList in _commandPlayers.Values)
+        {
+            foreach (var commandPlayer in commandPlayerList)
+            {
+                commandPlayer.StartCommand();
+            }
+        }
+
+        // Run
+        StartCoroutine(Run());
     }
 
     // ==================================================
     // ----- Play Turn -----
     // ==================================================
-    private void Play()
+    private IEnumerator Play()
     {
         for (int i = 0; i < (int)CommandPlayerPriority.Default; i++)
         {
@@ -91,27 +108,65 @@ public class ScenePlayer : MonoBehaviour
             if (_commandPlayers.TryGetValue(priority, out var list))
             {
 
-                // ÉäÉAÉNÉVÉáÉìé¿çs
+                // „Ç≥„Éû„É≥„ÉâÂÆüË°å
                 foreach(CommandPlayer player in list)
                 {
                     if (player == null)
                     {
-                        // è¡ãéèàóùÇ¢ÇÍÇΩÇ¢ÇÀ
+                        // Ê∂àÂéªÂá¶ÁêÜ„ÅÑ„Çå„Åü„ÅÑ„Å≠
                         continue;
                     }
                     player.PlayCommand();
                 }
 
+                // 0.5 seconds
+                yield return new WaitForSeconds(0.5f);
             }
         }
+
+        // 0.5 seconds
+        yield return new WaitForSeconds(0.5f);
+
         foreach (CommandPlayer player in _defaults)
         {
             if (player == null)
             {
-                // è¡ãéèàóùÇ¢ÇÍÇΩÇ¢ÇÀ
+                // Ê∂àÂéªÂá¶ÁêÜ„ÅÑ„Çå„Åü„ÅÑ„Å≠
                 continue;
             }
             player.PlayCommand();
         }
     }
+
+    private IEnumerator Run()
+    {
+        bool isPlaying = false;
+        do
+        {
+            // „Ç≥„Éû„É≥„ÉâÂÆüË°å
+            yield return Play();
+
+
+            isPlaying = false;
+            // „É°„Ç§„É≥„Éó„É¨„Ç§„É§„Éº„ÅÆÁµÇ‰∫Ü„ÉÅ„Çß„ÉÉ„ÇØ
+            CommandPlayerPriority priority = CommandPlayerPriority.Player;
+            if (_commandPlayers.TryGetValue(priority, out var playerList))
+            {
+                foreach (CommandPlayer player in playerList)
+                {
+                    isPlaying = isPlaying || player.IsPlaying;
+                }
+            }
+            // „Çµ„Éñ„Éó„É¨„Ç§„É§„Éº„ÅÆÁµÇ‰∫Ü„ÉÅ„Çß„ÉÉ„ÇØ
+            priority = CommandPlayerPriority.SubPlayer;
+            if (_commandPlayers.TryGetValue(priority, out var subList))
+            {
+                foreach (CommandPlayer player in subList)
+                {
+                    isPlaying = isPlaying || player.IsPlaying;
+                }
+            }
+        } while (isPlaying);
+    }
+
 }

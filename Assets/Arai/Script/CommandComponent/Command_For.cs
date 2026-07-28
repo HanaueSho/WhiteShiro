@@ -3,8 +3,10 @@
     20260728  arai eito
     コマンドFor文実行するためのコマンド
 */
+using UnityEngine;
 using UnityEngine.Events;
 
+[CreateAssetMenu(fileName = "Command_For", menuName = "Scriptable Objects/Command/For")]
 public class Command_For : Command_While
 {
     private int _forCursor;
