@@ -1,15 +1,16 @@
-/*
+ï»¿/*
     CommandComponent.cs
     20260728  hanaue sho
-    ƒRƒ}ƒ“ƒh‚ÌŠî’êƒNƒ‰ƒX
-    CommandPlayer ‚©‚ç‡‚ÉŒÄ‚Î‚ê‚é
+    ã‚³ãƒãƒ³ãƒ‰ã®åŸºåº•ã‚¯ãƒ©ã‚¹
+    CommandPlayer ã‹ã‚‰é †ã«å‘¼ã°ã‚Œã‚‹
 */
 using UnityEngine;
 
 public class CommandComponent : MonoBehaviour
 {
-    public virtual void Command()
+    public virtual bool Command()
     {
         Debug.Log($"{GetType()}");
+        return true;
     }
 }

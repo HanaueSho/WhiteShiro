@@ -1,8 +1,11 @@
-/*
+ï»¿/*
     CommandPlayer.cs
     20260728  hanaue sho
-    ƒLƒƒƒ‰ƒNƒ^[‚ª‚ÂƒRƒ}ƒ“ƒh
-    ScenePlayer ‚©‚ç‡‚ÉŒÄ‚Î‚ê‚é
+    ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ãŒæŒã¤ã‚³ãƒãƒ³ãƒ‰
+    ScenePlayer ã‹ã‚‰é †ã«å‘¼ã°ã‚Œã‚‹
+
+    20260728  arai eito
+    ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã‚’è¿½åŠ 
 */
 using UnityEngine;
 
@@ -11,20 +14,22 @@ public class CommandPlayer : MonoBehaviour
     [SerializeField] private ScenePlayer.CommandPlayerPriority _priority = ScenePlayer.CommandPlayerPriority.Default;
     public ScenePlayer.CommandPlayerPriority Priority => _priority;
 
-    // ƒRƒ}ƒ“ƒhƒRƒ“ƒ|[ƒlƒ“ƒg‚ÌƒŠƒXƒg‚ğ‚Â
-    // ƒJ[ƒ\ƒ‹‚ğ‚Â
+    // ã‚³ãƒãƒ³ãƒ‰ã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã®ãƒªã‚¹ãƒˆã‚’æŒã¤
+    // ã‚«ãƒ¼ã‚½ãƒ«ã‚’æŒã¤
+    [SerializeField] private CommandComponent _baseCommand;
 
-    // ŠÖ”‚ÅƒJ[ƒ\ƒ‹‚ªw‚·ƒŠƒXƒg‚ÌƒAƒNƒVƒ‡ƒ“‚ğÀs‚·‚é{ƒJ[ƒ\ƒ‹‚ğ“®‚©‚·
-    // ª‚±‚¢‚Â‚ğ ScenePlayer ‚ªŒÄ‚Ô
+    // é–¢æ•°ã§ã‚«ãƒ¼ã‚½ãƒ«ãŒæŒ‡ã™ãƒªã‚¹ãƒˆã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã‚’å®Ÿè¡Œã™ã‚‹ï¼‹ã‚«ãƒ¼ã‚½ãƒ«ã‚’å‹•ã‹ã™
+    // â†‘ã“ã„ã¤ã‚’ ScenePlayer ãŒå‘¼ã¶
 
     private void Start()
     {
-        // CommandComponent ‚ğ“o˜^
+        // CommandComponent ã‚’ç™»éŒ²
         ScenePlayer.Instance.Register(this);
     }
 
     public void PlayCommand()
     {
         Debug.Log($"{GetType()} : {_priority}");
+        _baseCommand.Command();
     }
 }
