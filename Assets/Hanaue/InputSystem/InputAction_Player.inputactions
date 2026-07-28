@@ -1,0 +1,55 @@
+{
+    "version": 1,
+    "name": "InputAction_Player",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "43aef080-622a-449f-b819-d7980a2ae293",
+            "actions": [
+                {
+                    "name": "CameraGrab",
+                    "type": "Button",
+                    "id": "a1351bf6-3af4-4771-8f1b-f87976135cec",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CameraMove",
+                    "type": "Value",
+                    "id": "77aa39d6-d9e7-40f3-9b17-f75ac04ad89f",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e380c762-4269-439f-a693-feeb1a15e066",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CameraGrab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5f3fd251-013f-4746-be55-5bfdaf73fe79",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CameraMove",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
