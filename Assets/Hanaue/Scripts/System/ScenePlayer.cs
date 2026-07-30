@@ -77,7 +77,16 @@ public class ScenePlayer : MonoBehaviour
     }
 
     public void OnPlay()
-    {
+    {   
+        // Start
+        foreach (var commandPlayerList in _commandPlayers.Values)
+        {
+            foreach (var commandPlayer in commandPlayerList)
+            {
+                commandPlayer.StartCommand();
+            }
+        }
+
         StartCoroutine(Play());
     }
 
