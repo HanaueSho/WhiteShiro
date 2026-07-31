@@ -20,7 +20,7 @@ public class UI_Base : MonoBehaviour
     // ==================================================
     public RectTransform RectTransform {  get 
         {
-            _rectTransform ??= transform as RectTransform;
+            _rectTransform ??= GetComponent<RectTransform>();
 
             if (_rectTransform == null)
             {
