@@ -3,6 +3,7 @@
     20260730  hanaue sho
     動くものに追従するブロックに持たせる
 */
+using System.Collections;
 using UnityEngine;
 
 public class Reaction_Follow : ReactionComponent
@@ -47,12 +48,14 @@ public class Reaction_Follow : ReactionComponent
         return true;
     }
 
-    public override void Reaction(Block influencer)
+    public override IEnumerator Reaction(Block influencer)
     {
         base.Reaction(influencer);
 
         // ----- 上部リアクション -----
         _upReactionFollow?.Reaction(influencer);
+
+        yield break;
     }
 
     public override void Exit(Block influencer)
@@ -65,7 +68,7 @@ public class Reaction_Follow : ReactionComponent
         // 重力処理
         if (GetComponent<Reaction_Gravity>() is Reaction_Gravity gravity)
         {
-            gravity.Reaction(GetComponent<Block>());
+            gravity.Enter(GetComponent<Block>());
         }
 
         // ----- 上部リアクション -----

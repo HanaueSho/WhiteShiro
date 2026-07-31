@@ -4,6 +4,8 @@
     コマンドの基底クラス
     CommandPlayer から順に呼ばれる
 */
+using System;
+using System.Collections;
 using UnityEngine;
 
 public class CommandComponent : ScriptableObject
@@ -44,14 +46,19 @@ public class CommandComponent : ScriptableObject
         // リアクションを呼ぶ
     }
 
-    public virtual bool Command(CommandPlayer owner)
+    public virtual IEnumerator Command(CommandPlayer owner, Action<bool> b)
     {
         Debug.Log($"[Command] {GetType()}");
-        return true;
+        if (b != null)
+        {
+            b(true);
+        }
+        yield break;
     }
 
-    public virtual void Exit(CommandPlayer owner)
+    public virtual IEnumerator Exit(CommandPlayer owner)
     {
         // リアクションを呼ぶ
+        yield break;
     }
 }

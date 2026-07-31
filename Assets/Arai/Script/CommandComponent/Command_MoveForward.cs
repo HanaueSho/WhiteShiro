@@ -3,6 +3,9 @@
     20260728  arai eito
     コマンド前方移動
 */
+using System;
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Command_MoveForward", menuName = "Scriptable Objects/Command/MoveForward")]
@@ -34,46 +37,64 @@ public class Command_MoveForward : CommandComponent
         Block upBlock = owner.GetComponent<Block>().GetUpBlock();
         _upReaction = upBlock?.GetComponent<Reaction_Follow>();
         _upReaction?.Enter(owner.GetComponent<Block>());
+        if (_upReaction == null && upBlock?.GetComponent<Reaction_Gravity>())
+        {
+            _upReaction = upBlock.GetComponent<Reaction_Gravity>();
+        }
     }
-    public override bool Command(CommandPlayer owner)
+
+    public override IEnumerator Command(CommandPlayer owner, Action<bool> result)
+
     {
-        base.Command(owner);
+        base.Command(owner, result);
 
         // IsCanMove
         if (!_IsCanMove)
         {
-            return true;
+            result(true);
+            yield break; 
         }
 
         // ----- Follow Reaction -----
-        _upReaction?.Reaction(owner.GetComponent<Block>());
+        //yield return _upReaction?.Reaction(owner.GetComponent<Block>());
 
         // ----- Pushed Reaction -----
-        _forwardReaction?.Reaction(owner.GetComponent<Block>());
+        //yield return _forwardReaction?.Reaction(owner.GetComponent<Block>());
 
         // 正面チェック
         Block forwardBlock = owner.GetComponent<Block>().GetForwardBlock();
         if (forwardBlock != null && _forwardReaction == null)
         {
             // 正面にブロックがあるので進まない
-            return true; // コマンド自体は消費する
-        }
-        // 移動処理
-        Transform block = owner?.transform;
-        if(block != null )
-        {
-            block.position += block.forward;
+            result(true); // コマンド自体は消費する
+            yield break;
         }
 
-        return true;
+        // ----- 移動処理 -----
+        Vector3 startPosition = owner.transform.position;
+        Vector3 targetPosition = owner.transform.position + owner.transform.forward;
+        float elapsedTime = 0.0f;
+        float moveDuration = 0.5f;
+        while(elapsedTime < moveDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsedTime / moveDuration);
+            owner.transform.position = Vector3.Lerp(startPosition, targetPosition, t);
+
+            yield return null; // 次フレームまで待つ
+        }
+        owner.transform.position = targetPosition;
+
+        result(true);
+        yield break;
     }
 
-    public override void Exit(CommandPlayer owner)
+    public override IEnumerator Exit(CommandPlayer owner)
     {
         // 重力適用
         if (owner.GetComponent<Reaction_Gravity>() && owner.GetComponent<Block>())
         {
-            owner.GetComponent<Reaction_Gravity>().Reaction(owner.GetComponent<Block>());
+            owner.GetComponent<Reaction_Gravity>().Enter(owner.GetComponent<Block>());
         }
 
         // ----- Follow Exit -----
@@ -81,5 +102,6 @@ public class Command_MoveForward : CommandComponent
         // ----- Pushed Exit -----
         _forwardReaction?.Exit(owner.GetComponent<Block>());
 
+        yield break;
     }
 }

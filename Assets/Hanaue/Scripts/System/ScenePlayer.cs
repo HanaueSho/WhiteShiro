@@ -125,12 +125,17 @@ public class ScenePlayer : MonoBehaviour
                         // 消去処理いれたいね
                         continue;
                     }
-                    player.PlayCommand();
+                    // player.PlayCommand();
+                    yield return player.PlayCommand();
                 }
 
                 // 0.5 seconds
                 yield return new WaitForSeconds(0.5f);
             }
+        }
+        // for(gimmc)
+        {
+            //StartCoroutine(gimmic.PlayCommand);
         }
 
         // 0.5 seconds

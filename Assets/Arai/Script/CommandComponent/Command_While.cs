@@ -3,6 +3,8 @@
     20260728  arai eito
     コマンドでWhile文実行するためのコマンド
 */
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Input;
 using UnityEngine;
@@ -70,9 +72,9 @@ public class Command_While : CommandComponent
         base.Enter(owner);
     }
 
-    public override bool Command(CommandPlayer owner)
+    public override IEnumerator Command(CommandPlayer owner, Action<bool> result)
     {
-        base.Command(owner);
+        base.Command(owner, result);
 
 
         int commandCount = _inCommands.Count;
@@ -81,14 +83,16 @@ public class Command_While : CommandComponent
         // チェック
         if(commandCount <= 0 || _commandCursor >= commandCount)
         {
-            return false;
+            result(false);
+            yield break;
         }
 
         // コマンドを実行
         // コマンドがnullだったら強制的に次のコマンドに移行する
+        bool next = true;
         _inCommands[_commandCursor]?.Enter(owner);
-        bool next = _inCommands[_commandCursor]?.Command(owner) ?? true;
-        _inCommands[_commandCursor]?.Exit(owner);
+        yield return _inCommands[_commandCursor]?.Command(owner, b => next = b);
+        yield return _inCommands[_commandCursor]?.Exit(owner);
 
 
         // カーソルを次に進める
@@ -100,11 +104,13 @@ public class Command_While : CommandComponent
             if(_commandCursor >= commandCount)
             {
                 _commandCursor = 0;
-                return OnLoopEnd();
+                result(OnLoopEnd());
+                yield break;
             }
         }
 
-        return false;
+        result(false);
+        yield break;
     }
 
     /// <summary>
