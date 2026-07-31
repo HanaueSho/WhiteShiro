@@ -3,6 +3,7 @@
     20260730  hanaue sho
     押せるブロックに持たせる
 */
+using System.Collections;
 using UnityEngine;
 
 public class Reaction_Pushed : ReactionComponent
@@ -54,13 +55,15 @@ public class Reaction_Pushed : ReactionComponent
         return result;
     }
 
-    public override void Reaction(Block influencer)
+    public override IEnumerator Reaction(Block influencer)
     {
         base.Reaction(influencer);
 
         // ----- 上部リアクション -----
-        _upReactionFollow?.Reaction(influencer);
-        _forwardReactionPushed?.Reaction(influencer);
+        yield return _upReactionFollow?.Reaction(influencer);
+        yield return _forwardReactionPushed?.Reaction(influencer);
+
+        yield break;
     }
 
     public override void Exit(Block influencer)
@@ -73,7 +76,7 @@ public class Reaction_Pushed : ReactionComponent
         // 重力処理
         if (GetComponent<Reaction_Gravity>() is Reaction_Gravity gravity)
         {
-            gravity.Reaction(GetComponent<Block>());
+            gravity.Enter(GetComponent<Block>());
         }
 
         // ----- 上部リアクション -----

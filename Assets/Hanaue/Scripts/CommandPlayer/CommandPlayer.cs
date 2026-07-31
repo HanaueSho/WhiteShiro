@@ -7,6 +7,7 @@
     20260728  arai eito
     コマンドリストを追加
 */
+using System.Collections;
 using UnityEngine;
 
 public class CommandPlayer : MonoBehaviour
@@ -40,11 +41,11 @@ public class CommandPlayer : MonoBehaviour
     // ==================================================
     // ----- Public Events -----
     // ==================================================
-    public void PlayCommand()
+    public IEnumerator PlayCommand()
     {
         if (!IsPlaying)
         {
-            return;
+            yield break;
         }
 
         // Command 実行
@@ -53,14 +54,17 @@ public class CommandPlayer : MonoBehaviour
         // Enter
         _baseCommand?.Enter(this);
         // Commnad
-        if (_baseCommand?.Command(this) ?? true)
+        bool isFinish = false;
+        yield return _baseCommand?.Command(this, b => isFinish = b);
+        if (isFinish)
         {
             // Command が true を返したら実行を止める
             IsPlaying = false;
         }
         // Exit 
-        _baseCommand?.Exit(this);
-        
+        yield return _baseCommand?.Exit(this);
+
+        yield break;
     }
 
     public void StartCommand()

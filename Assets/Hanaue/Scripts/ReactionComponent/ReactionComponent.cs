@@ -4,6 +4,7 @@
     ブロックに持たせる機能の基底クラス
     色んなところから Reaction を呼ぶ
 */
+using System.Collections;
 using UnityEngine;
 
 public class ReactionComponent : MonoBehaviour
@@ -16,9 +17,10 @@ public class ReactionComponent : MonoBehaviour
     // ==================================================
     // ----- Reaction -----
     // ==================================================
-    public virtual void Reaction(Block influencer)
+    public virtual IEnumerator Reaction(Block influencer)
     {
         Debug.Log($"{GetType()}");
+        yield break;
     }
 
     public virtual void Exit(Block influencer)
