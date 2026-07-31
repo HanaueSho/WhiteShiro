@@ -4,7 +4,9 @@
     コマンドの見た目の基底クラス
 */
 using System.Collections.Generic;
+using Unity.GraphToolkit.Editor;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -146,46 +148,71 @@ public class CommandVisualNode_Base : UI_Base , IInitializePotentialDragHandler,
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        // 見た目元の場所に戻す
+        // 見た目をドロップ位置に移動させる
         Vector3 skinPosition = _skinRectTransform.position;
         _skinRectTransform.anchoredPosition = _dragBeginSkinPosition;
         transform.position = skinPosition;
         
-        // 入れ替えのCommandVisualNode を取得
-        CommandVisualNode_Base anotherNode = null;
-
+        
         // カーソルにあるUIの一覧を取得
         List<RaycastResult> results = new();
         EventSystem.current.RaycastAll(eventData, results);
         foreach (RaycastResult result in results)
         {
-            CommandVisualNode_Base currentNode = result.gameObject.GetComponentInParent<CommandVisualNode_Base>();
-            if(currentNode != this)
+            GameObject obj = result.gameObject;
+
+            // InNode 挿入
+            if(obj.GetComponentInParent<CommandVisualNode_Base>() is CommandVisualNode_Base anotherNode)
             {
-                anotherNode = currentNode;
+                if (anotherNode == this)
+                {
+                    continue;
+                }
+
+                InNode(this, anotherNode);
                 break;
             }
+
+            // DeleteNode 削除
+            else if(obj.GetComponentInParent<CommandVisualTrashCan>() is CommandVisualTrashCan trashCan)
+            {
+                trashCan.DeleteNode(this);
+            }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+
+        Vector3 position = _skinRectTransform.TransformPoint(Vector3.zero);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(position, 10f);
+    }
+
+    // ==================================================
+    // ----- Drag Event -----
+    // ==================================================
+    private void InNode(CommandVisualNode_Base inNode , CommandVisualNode_Base anotherNode )
+    {
 
         // 入れ替え無し
-        if(anotherNode == null || anotherNode == _rootNode || anotherNode.transform.IsChildOf(transform))
+        if (inNode == null || 
+            anotherNode == null || 
+            anotherNode.transform.IsChildOf(transform))
         {
             return;
         }
 
-
-        // 交換
-        // Commandチェイン入れ替え
-
         // 自分の末端
         // 自分がWhile系統だったらInCommandも移動させたい
-        CommandVisualNode_Base lastNode = this;
-        if (_command is Command_While)
+        CommandVisualNode_Base lastNode = inNode;
+        if (inNode._command is Command_While)
         {
             // 最終を調べる
-            while( 
+            while (
                 lastNode._afterNode != null &&
-                lastNode._afterNode._indent > _indent )
+                lastNode._afterNode._indent > inNode._indent)
             {
                 lastNode = lastNode._afterNode;
             }
@@ -198,13 +225,13 @@ public class CommandVisualNode_Base : UI_Base , IInitializePotentialDragHandler,
 
         // 一時的に自分を除外する
         {
-            if(_beforeNode != null)
+            if (inNode._beforeNode != null)
             {
-                _beforeNode._afterNode = exitNode;
+                inNode._beforeNode._afterNode = exitNode;
             }
-            if(exitNode != null)
+            if (exitNode != null)
             {
-                exitNode._beforeNode = _beforeNode;
+                exitNode._beforeNode = inNode._beforeNode;
             }
         }
 
@@ -212,39 +239,45 @@ public class CommandVisualNode_Base : UI_Base , IInitializePotentialDragHandler,
         // 自分を加える
         {
             // 自分
-            if (transform.position.y > anotherNode.transform.position.y)
+            // 選択ノードがルートの場合は必ず下方向に追加する。
+            if ( anotherNode == anotherNode.Root || inNode.transform.position.y < anotherNode.transform.position.y )
             {
-                _beforeNode = anotherNode._beforeNode;
-                lastNode._afterNode = anotherNode;
-            }
-            else
-            {
-                _beforeNode = anotherNode;                
+                inNode._beforeNode = anotherNode;
                 lastNode._afterNode = anotherNode._afterNode;
             }
-            // 周り
-            if (_beforeNode != null)
+            // 上方向
+            else
             {
-                _beforeNode._afterNode = this;
+                inNode._beforeNode = anotherNode._beforeNode;
+                lastNode._afterNode = anotherNode;
             }
-            if (lastNode._afterNode != null)
+            // 周り
             {
-                lastNode._afterNode._beforeNode = lastNode;
+                if(inNode._beforeNode != null)
+                {
+                    inNode._beforeNode._afterNode = inNode;
+                }
+
+                if(lastNode._afterNode != null)
+                {
+                    lastNode._afterNode._beforeNode = lastNode;
+                }
             }
         }
+        
 
         // While設定
         {
 
             // While 解除
-            CommandVisualNode_Base cmdWhileNode = transform.parent.GetComponentInParent<CommandVisualNode_Base>();
+            CommandVisualNode_Base cmdWhileNode = inNode.transform.parent.GetComponentInParent<CommandVisualNode_Base>();
             Command_While cmdWhile = cmdWhileNode?.Command as Command_While;
-            cmdWhile?.RemoveCommand(_command);
+            cmdWhile?.RemoveCommand(inNode._command);
 
             // While 登録
             cmdWhile = null;
 
-            if (anotherNode != _afterNode)
+            if(inNode._beforeNode == anotherNode)
             {
                 cmdWhileNode = anotherNode;
                 cmdWhile = cmdWhileNode?.Command as Command_While;
@@ -252,32 +285,45 @@ public class CommandVisualNode_Base : UI_Base , IInitializePotentialDragHandler,
 
             if (cmdWhile == null)
             {
-                cmdWhileNode = anotherNode.transform.parent.GetComponentInParent<CommandVisualNode_Base>();
+                cmdWhileNode = anotherNode.transform.parent.GetComponent<CommandVisualNode_Base>();
                 cmdWhile = cmdWhileNode?.Command as Command_While;
             }
 
-            cmdWhile?.AddCommand(_beforeNode._command, _command);
+            // beforeにするとfor内部のcommandかもしれないのでindentで調べる
+            {
+                CommandVisualNode_Base listBefore = inNode;
+
+                while ((listBefore = listBefore._beforeNode) != null)
+                {
+                    if (listBefore._indent <= anotherNode._indent)
+                    {
+                        break;
+                    }
+                }
+
+                cmdWhile?.AddCommand(listBefore._command, inNode._command);
+            }
 
             // Transform Parent設定
-            transform.SetParent(cmdWhileNode.transform);
+            inNode.transform.SetParent(cmdWhileNode.transform);
 
-
+            // Root 設定
+            inNode.Root = anotherNode.Root;
 
             // Whileだったら自分の子どものインデントを変える            
-            SetNodeIndent(this);
+            SetNodeIndent(inNode);
         }
-
     }
     private void SetNodeIndent(CommandVisualNode_Base node)
     {
-        if(node == null)
+        if (node == null)
         {
             return;
         }
-        
+
         // 親検索
         CommandVisualNode_Base parentNode = node.transform.parent.GetComponentInParent<CommandVisualNode_Base>();
-        if(parentNode?.Command is not Command_While)
+        if (parentNode?.Command is not Command_While)
         {
             return;
         }
@@ -286,23 +332,14 @@ public class CommandVisualNode_Base : UI_Base , IInitializePotentialDragHandler,
         node._indent = parentNode?._indent + 1 ?? -1;
 
         // 子インデント設定
-        foreach(Transform child in node.transform)
+        foreach (Transform child in node.transform)
         {
             var childNode = child.GetComponent<CommandVisualNode_Base>();
-            if(childNode != null)
+            if (childNode != null)
             {
                 SetNodeIndent(childNode);
             }
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-
-        Vector3 position = _skinRectTransform.TransformPoint(Vector3.zero);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(position, 10f);
     }
 
 }

@@ -26,6 +26,7 @@ public class CommandPlayer : MonoBehaviour
     // ----- Public Propaty -----
     // ==================================================
     public bool IsPlaying { get; private set; }
+    public CommandComponent BaseCommand { get { return _baseCommand; } set { _baseCommand = value; } }
 
 
     // ==================================================

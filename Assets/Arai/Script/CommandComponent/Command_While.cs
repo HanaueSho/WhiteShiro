@@ -4,7 +4,6 @@
     コマンドでWhile文実行するためのコマンド
 */
 using System.Collections.Generic;
-using System.Windows.Input;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Command_While", menuName = "Scriptable Objects/Command/While")]
@@ -37,22 +36,33 @@ public class Command_While : CommandComponent
     // ==================================================
     public void AddCommand(CommandComponent before, CommandComponent cmd)
     {
-        int index = _inCommands.IndexOf(before);
-        Debug.Log(index);
-
-        // beforeがnullなら もしくは対象外なら先頭に入れる
-        if (index == -1)
+        // 先頭
+        if(before == this)
         {
             _inCommands.Insert(0, cmd);
             return;
         }
 
+        int index = _inCommands.IndexOf(before);
+
+        // beforeがnullなら最後
+        if (index == -1)
+        {
+            _inCommands.Add(cmd);
+            return;
+        }
+
+        // Index に入れる
         _inCommands.Insert(index + 1, cmd);
     }
 
     public void RemoveCommand(CommandComponent cmd)
     {
         _inCommands.Remove(cmd);
+    }
+    public void ClearCommand()
+    {
+        _inCommands.Clear();
     }
 
     public override void Initialize()
