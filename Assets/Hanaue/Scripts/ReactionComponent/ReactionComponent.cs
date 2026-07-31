@@ -1,18 +1,29 @@
-/*
+ï»¿/*
     ReactionComponent.cs
     20260728  hanaue sho
-    ƒuƒƒbƒN‚É‚½‚¹‚é‹@”\‚ÌŠî’êƒNƒ‰ƒX
-    F‚ñ‚È‚Æ‚±‚ë‚©‚ç Reaction ‚ğŒÄ‚Ô
+    ãƒ–ãƒ­ãƒƒã‚¯ã«æŒãŸã›ã‚‹æ©Ÿèƒ½ã®åŸºåº•ã‚¯ãƒ©ã‚¹
+    è‰²ã‚“ãªã¨ã“ã‚ã‹ã‚‰ Reaction ã‚’å‘¼ã¶
 */
 using UnityEngine;
 
 public class ReactionComponent : MonoBehaviour
 {
+    public virtual bool Enter(Block influencer)
+    {
+        return false;
+    }
+
     // ==================================================
     // ----- Reaction -----
     // ==================================================
-    public virtual void Reaction()
+    public virtual void Reaction(Block influencer)
     {
         Debug.Log($"{GetType()}");
     }
+
+    public virtual void Exit(Block influencer)
+    {
+
+    }
+
 }

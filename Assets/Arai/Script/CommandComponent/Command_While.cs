@@ -65,9 +65,9 @@ public class Command_While : CommandComponent
         }
     }
 
-    public override void Enter()
+    public override void Enter(CommandPlayer owner)
     {
-        base.Enter();
+        base.Enter(owner);
     }
 
     public override bool Command(CommandPlayer owner)
@@ -86,7 +86,9 @@ public class Command_While : CommandComponent
 
         // コマンドを実行
         // コマンドがnullだったら強制的に次のコマンドに移行する
+        _inCommands[_commandCursor]?.Enter(owner);
         bool next = _inCommands[_commandCursor]?.Command(owner) ?? true;
+        _inCommands[_commandCursor]?.Exit(owner);
 
 
         // カーソルを次に進める

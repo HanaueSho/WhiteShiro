@@ -51,16 +51,16 @@ public class CommandPlayer : MonoBehaviour
         Debug.Log($"{GetType()} : {_priority}");
 
         // Enter
-        _baseCommand?.Enter();
+        _baseCommand?.Enter(this);
         // Commnad
         if (_baseCommand?.Command(this) ?? true)
         {
             // Command が true を返したら実行を止める
             IsPlaying = false;
         }
-        // Exit
-        _baseCommand?.Exit();
-
+        // Exit 
+        _baseCommand?.Exit(this);
+        
     }
 
     public void StartCommand()
