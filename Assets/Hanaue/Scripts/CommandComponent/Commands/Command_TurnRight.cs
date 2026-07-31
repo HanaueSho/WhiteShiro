@@ -11,6 +11,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Command_TurnRight", menuName = "Scriptable Objects/Command/TurnRight")]
 public class Command_TurnRight : CommandComponent
 {
+    // ==================================================
+    // ----- Unity Event -----
+    // ==================================================
+    private void OnEnable()
+    {
+        _visualText = "右回りしろ";
+    }
+
     public override IEnumerator Command(CommandPlayer owner, Action<bool> result)
     {
         base.Command(owner, result);

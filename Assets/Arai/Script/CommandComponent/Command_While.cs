@@ -6,6 +6,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Windows.Input;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Command_While", menuName = "Scriptable Objects/Command/While")]
@@ -21,10 +22,41 @@ public class Command_While : CommandComponent
     // ==================================================
     [SerializeField] private List<CommandComponent> _inCommands;
 
+    // ==================================================
+    // ----- Public Propaty -----
+    // ==================================================
+    public List<CommandComponent> InCommand => _inCommands;
 
+    // ==================================================
+    // ----- Unity Event -----
+    // ==================================================
+    private void OnEnable()
+    {
+        _visualText = "無限にしろ";
+    }
     // ==================================================
     // ----- Public Events -----
     // ==================================================
+    public void AddCommand(CommandComponent before, CommandComponent cmd)
+    {
+        int index = _inCommands.IndexOf(before);
+        Debug.Log(index);
+
+        // beforeがnullなら もしくは対象外なら先頭に入れる
+        if (index == -1)
+        {
+            _inCommands.Insert(0, cmd);
+            return;
+        }
+
+        _inCommands.Insert(index + 1, cmd);
+    }
+
+    public void RemoveCommand(CommandComponent cmd)
+    {
+        _inCommands.Remove(cmd);
+    }
+
     public override void Initialize()
     {
         base.Initialize();
