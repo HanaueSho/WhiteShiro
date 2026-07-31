@@ -7,8 +7,16 @@ using UnityEngine;
 
 
 [CreateAssetMenu(fileName = "Command_TurnRight", menuName = "Scriptable Objects/Command/TurnRight")]
-public class Command_TurnRight : CommandComponent 
+public class Command_TurnRight : CommandComponent
 {
+    // ==================================================
+    // ----- Unity Event -----
+    // ==================================================
+    private void OnEnable()
+    {
+        _visualText = "右回りしろ";
+    }
+
     public override bool Command(CommandPlayer owner)
     {
         base.Command(owner);
