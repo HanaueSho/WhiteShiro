@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Command_ForOnce_Player
   m_EditorClassIdentifier: Assembly-CSharp::Command_ForOnce
   _inCommands:
+  - {fileID: 11400000, guid: bc12c65f3ab84924e8cd563e0fc8b6f9, type: 2}
+  - {fileID: 11400000, guid: 6bbcf887e09c8d443999ecaab614b389, type: 2}
+  - {fileID: 11400000, guid: 6bbcf887e09c8d443999ecaab614b389, type: 2}
+  - {fileID: 11400000, guid: bc12c65f3ab84924e8cd563e0fc8b6f9, type: 2}
+  - {fileID: 11400000, guid: bc12c65f3ab84924e8cd563e0fc8b6f9, type: 2}
   - {fileID: 11400000, guid: 62eb48ac5d830ad4bb54c9fc12efb15a, type: 2}
   - {fileID: 11400000, guid: 62eb48ac5d830ad4bb54c9fc12efb15a, type: 2}
-  - {fileID: 11400000, guid: 174dc010a0a1d24408d728da119c5cd3, type: 2}
-  - {fileID: 11400000, guid: f7b967b4d0a93f246923e78ba48456ff, type: 2}
-  - {fileID: 11400000, guid: 174dc010a0a1d24408d728da119c5cd3, type: 2}
-  - {fileID: 11400000, guid: bc12c65f3ab84924e8cd563e0fc8b6f9, type: 2}
-  - {fileID: 11400000, guid: f7b967b4d0a93f246923e78ba48456ff, type: 2}
-  - {fileID: 11400000, guid: 174dc010a0a1d24408d728da119c5cd3, type: 2}
-  - {fileID: 11400000, guid: bc12c65f3ab84924e8cd563e0fc8b6f9, type: 2}
+  - {fileID: 11400000, guid: 62eb48ac5d830ad4bb54c9fc12efb15a, type: 2}
+  - {fileID: 11400000, guid: 62eb48ac5d830ad4bb54c9fc12efb15a, type: 2}

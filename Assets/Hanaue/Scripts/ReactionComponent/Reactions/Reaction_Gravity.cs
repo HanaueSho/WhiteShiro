@@ -12,13 +12,11 @@ public class Reaction_Gravity : ReactionComponent
 {
     private Vector3 _targetPosition = Vector3.zero;
 
-    public override bool Enter(Block influencer)
+    public override bool Enter(Block influencer, CommandComponent command = null)
     {
-        base.Enter(influencer);
-
         // 重力処理
-        Block downBlock = GetComponent<Block>().GetDownBlock();   // 足元ブロック
-        Block lowerBlock = GetComponent<Block>().GetLowerBlock(); // それより下のブロック
+        Block downBlock = GetComponent<Block>().GetDownBlock(true);   // 足元ブロック
+        Block lowerBlock = GetComponent<Block>().GetLowerBlock(true); // それより下のブロック
         if (downBlock == null && lowerBlock != null)
         {
             _targetPosition = lowerBlock.transform.position + new Vector3(0.0f, 1.0f, 0.0f);
@@ -70,7 +68,7 @@ public class Reaction_Gravity : ReactionComponent
     
     public IEnumerator CheckUpBlockReactionGravity()
     {
-        Block upBlock = GetComponent<Block>().GetUpBlock();
+        Block upBlock = GetComponent<Block>().GetUpBlock(true);
         Reaction_Gravity gravity = upBlock?.GetComponent<Reaction_Gravity>();
         if (gravity)
         {
@@ -78,6 +76,9 @@ public class Reaction_Gravity : ReactionComponent
             gravity._targetPosition = _targetPosition + new Vector3(0.0f, 1.0f, 0.0f);
             yield return new WaitForSeconds(0.1f);
             StartCoroutine(gravity.Reaction(GetComponent<Block>()));
+
+            // 自分の頭の上に重力持ちがいるなら落下
+            StartCoroutine(gravity.CheckUpBlockReactionGravity());
         }
 
         yield break;

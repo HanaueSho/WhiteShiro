@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class ReactionComponent : MonoBehaviour
 {
-    public virtual bool Enter(Block influencer)
+    public virtual bool Enter(Block influencer, CommandComponent command)
     {
         return false;
     }

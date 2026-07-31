@@ -42,33 +42,37 @@ public class Block : MonoBehaviour
         return result;
     }
     // 正面のブロックを取得
-    public Block GetForwardBlock()
+    public Block GetForwardBlock(bool isWorld = false)
     {
         // ----- オブジェクトの位置同期（処理重かったらごめんね） -----
         Physics.SyncTransforms();
-        return GetBlock(Vector3.forward);
+        return GetBlock(Vector3.forward, isWorld);
     }
     // 上部のブロックを取得
-    public Block GetUpBlock()
+    public Block GetUpBlock(bool isWorld = false)
     {
         // ----- オブジェクトの位置同期（処理重かったらごめんね） -----
         Physics.SyncTransforms();
-        return GetBlock(Vector3.up);
+        return GetBlock(Vector3.up, isWorld);
     }
     // 真下のブロックを取得
-    public Block GetDownBlock()
+    public Block GetDownBlock(bool isWorld = false)
     {
         // ----- オブジェクトの位置同期（処理重かったらごめんね） -----
         Physics.SyncTransforms();
-        return GetBlock(Vector3.down);
+        return GetBlock(Vector3.down, isWorld);
     }
     // ２マス以上下のブロックを取得
-    public Block GetLowerBlock()
+    public Block GetLowerBlock(bool isWorld = false)
     {
         // ----- オブジェクトの位置同期（処理重かったらごめんね） -----
         Physics.SyncTransforms();
         Vector3 worldDirection = transform.TransformDirection(Vector3.down);
-        if (Physics.Raycast(transform.position + new Vector3(0.0f, -1.0f, 0.0f), worldDirection, out RaycastHit hit, 100.0f)) // 100マス下まで検索
+        if (isWorld)
+        {
+            worldDirection = Vector3.down;
+        }
+        if (Physics.Raycast(transform.position + worldDirection, worldDirection, out RaycastHit hit, 100.0f)) // 100マス下まで検索
         {
             if (hit.transform.GetComponent<Block>())
             {
@@ -82,9 +86,14 @@ public class Block : MonoBehaviour
     // ----- Get Block -----
     // 引数の方向のブロックを取得
     // ==================================================
-    private Block GetBlock(Vector3 localDirection)
+    public Block GetBlock(Vector3 localDirection, bool isWorld = false)
     {
         Vector3 worldDirection = transform.TransformDirection(localDirection);
+        if (isWorld)
+        {
+            worldDirection = localDirection;
+        }
+
         if (Physics.Raycast(transform.position, worldDirection, out RaycastHit hit, 1.0f))
         {
             if (hit.transform.GetComponent<Block>())
