@@ -4,9 +4,7 @@
     コマンドの見た目の基底クラス
 */
 using System.Collections.Generic;
-using Unity.GraphToolkit.Editor;
 using UnityEngine;
-using UnityEngine.Analytics;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -27,8 +25,8 @@ public class CommandVisualNode_Base : UI_Base , IInitializePotentialDragHandler,
     private int _indent = 0;
     private CommandComponent _command = null;
     private CommandVisualNode_Base _rootNode;
-    [SerializeField] private CommandVisualNode_Base _beforeNode;
-    [SerializeField] private CommandVisualNode_Base _afterNode;
+    private CommandVisualNode_Base _beforeNode;
+    private CommandVisualNode_Base _afterNode;
 
     private float _moveSpeed = 15.0f;
 

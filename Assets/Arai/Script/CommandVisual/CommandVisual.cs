@@ -14,6 +14,7 @@ public class CommandVisual : MonoBehaviour
     // ==================================================
     [SerializeField] private CommandComponent _root;
     [SerializeField] private GameObject _nodePrefab;
+    [SerializeField] private GameObject _nodeAccessoryIntPrefab;
     // ゲーム上での可変データ
     private CommandVisualNode_Base _rootVisualNode;
     private List<CommandVisualNode_Base> _nodes = new();
@@ -135,6 +136,7 @@ public class CommandVisual : MonoBehaviour
         CommandVisualNode_Base node = obj.GetComponent<CommandVisualNode_Base>();
         if (node == null)
         {
+            Destroy(obj);
             return null;
         }
         node.Indent = -1;
@@ -161,14 +163,54 @@ public class CommandVisual : MonoBehaviour
         // 場所
         obj.transform.position = transform.position;
 
+
+
+        // ノード付属品を作る関数 ( for文など )
+        CreateNodeAccessory(node);
+
         return node;
+    }
+    private void CreateNodeAccessory(CommandVisualNode_Base node)
+    {
+        CommandComponent cmd = node.Command;
+
+        if(cmd as Command_For)
+        {
+            CreateNodeAccessoryFor(node);
+        }
+    }
+    private void CreateNodeAccessoryFor(CommandVisualNode_Base parentNode)
+    {
+        Command_For cmdFor = parentNode?.Command as Command_For;
+        if(cmdFor == null)
+        {
+            return;
+        }
+
+        // ノードオブジェクト生成
+        GameObject obj = Instantiate(_nodeAccessoryIntPrefab);
+        obj.name = parentNode.name;
+        obj.transform.SetParent(parentNode.transform,false);
+        obj.transform.position = parentNode.transform.position;
+
+        // ノードクラス生成
+        CommandVisualNode_Accessory_Int node = obj.GetComponent<CommandVisualNode_Accessory_Int>();
+        if (node == null)
+        {
+            Destroy(obj);
+            return;
+        }
+
+        // コマンド
+        node.IntSetAction = cmdFor.SetForMax;
+        node.ParentNode = parentNode;       
     }
 
 
-    // ==================================================
-    // ----- Command Player Events -----
-    // ==================================================
-    public void SetCommandPlayer(CommandPlayer commandPlayer)
+// ==================================================
+// ----- Command Player Events -----
+// ==================================================
+public void SetCommandPlayer(CommandPlayer commandPlayer)
     {
         if (commandPlayer == null)
         {

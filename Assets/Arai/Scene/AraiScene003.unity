@@ -1455,6 +1455,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CommandVisual
   _root: {fileID: 11400000, guid: 9d980a277cb98c644823015aba045fe7, type: 2}
   _nodePrefab: {fileID: 1505661913755803419, guid: 51029d6698d71a243aeb7f5145ef8ebe, type: 3}
+  _nodeAccessoryIntPrefab: {fileID: 607187673387115473, guid: 8059fd91079034349b236a0fa321e663, type: 3}
 --- !u!224 &537256613
 RectTransform:
   m_ObjectHideFlags: 0
