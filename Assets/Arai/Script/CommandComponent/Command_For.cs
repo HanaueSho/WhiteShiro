@@ -9,11 +9,23 @@ using UnityEngine.Events;
 [CreateAssetMenu(fileName = "Command_For", menuName = "Scriptable Objects/Command/For")]
 public class Command_For : Command_While
 {
+    // ==================================================
+    // ----- Propaty -----
+    // ==================================================
     private int _forCursor;
-    private int _forMax;
+    private int _forMax = 3;
 
+    // ==================================================
+    // ----- Unity Event -----
+    // ==================================================
+    private void OnEnable()
+    {
+        _visualText = "1 回繰り返す";
+    }
 
-
+    // ==================================================
+    // ----- Public Event -----
+    // ==================================================
     protected override bool OnLoopEnd()
     {
         _forCursor++;

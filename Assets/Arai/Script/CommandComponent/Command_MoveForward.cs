@@ -8,6 +8,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Command_MoveForward", menuName = "Scriptable Objects/Command/MoveForward")]
 public class Command_MoveForward : CommandComponent
 {
+    // ==================================================
+    // ----- Unity Event -----
+    // ==================================================
+    private void OnEnable()
+    {
+        _visualText = "前進しろ";
+    }
     // 動けるかフラグ
     private bool _IsCanMove = true;
 
@@ -28,7 +35,6 @@ public class Command_MoveForward : CommandComponent
         _upReaction = upBlock?.GetComponent<Reaction_Follow>();
         _upReaction?.Enter(owner.GetComponent<Block>());
     }
-
     public override bool Command(CommandPlayer owner)
     {
         base.Command(owner);
