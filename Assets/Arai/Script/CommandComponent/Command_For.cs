@@ -25,7 +25,7 @@ public class Command_For : Command_While
     // ==================================================
     private void OnEnable()
     {
-        _visualText = "1 回繰り返す";
+        _visualText = "くり返す";
     }
 
     // ==================================================

@@ -154,8 +154,6 @@ public class CommandVisual : MonoBehaviour
         }
 
         // 色
-        int nameHash = obj.name.GetHashCode();
-        node.SetColor(Color.HSVToRGB(((nameHash & 0xFFFF) / 65535f), 0.8f, 1.0f));
 
         // 親
         obj.transform.SetParent(null);

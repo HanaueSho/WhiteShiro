@@ -12,6 +12,7 @@ public class CommandVisualNode_Accessory_Int : UI_Base
     [SerializeField] private Button _upButton;
     [SerializeField] private Button _downButton;
     [SerializeField] private Text _text;
+    [SerializeField] private Vector2 _offset;
 
     private CommandVisualNode_Base _parentNode;
     private UnityAction<int> _intSetAction;
@@ -22,7 +23,7 @@ public class CommandVisualNode_Accessory_Int : UI_Base
     private float _moveSpeed = 15.0f;
     public UnityAction<int> IntSetAction {  get { return _intSetAction; } set { _intSetAction = value; } }
     public CommandVisualNode_Base ParentNode { set { _parentNode = value; } }
-
+    public Vector2 Offset { set { _offset = value; } }
 
 
     // ==================================================
@@ -64,10 +65,11 @@ public class CommandVisualNode_Accessory_Int : UI_Base
         {
             position.x = 
                 _parentNode.transform.position.x + 
-                (_parentNode.RectTransform.sizeDelta.x + RectTransform.sizeDelta.x) * 0.5f;
+                (- _parentNode.RectTransform.sizeDelta.x + RectTransform.sizeDelta.x) * 0.5f +
+                _offset.x;
 
 
-            position.y = _parentNode.transform.position.y;
+            position.y = _parentNode.transform.position.y + _offset.y;
         }
 
 
