@@ -103,4 +103,40 @@ public class Block : MonoBehaviour
         }
         return null;
     }
+
+    // ==================================================
+    // ----- Get Block On Same Grid -----
+    // 同じグリッド座標上にあるか判定
+    // ==================================================
+    public Block GetBlockOnSameGrid()
+    {
+        Block result = null;
+
+        // 自身の座標に矩形の当たり判定をとる
+        Vector3 halfExtents = new Vector3(0.1f, 0.1f, 0.1f);
+        Collider[] colliders = Physics.OverlapBox(
+            transform.position,
+            halfExtents,
+            Quaternion.identity
+        );
+
+        foreach (Collider collider in colliders)
+        {
+            Block block = collider.GetComponent<Block>();
+            if (block == null)
+            {
+                continue;
+            }
+            if (block == this)
+            {
+                continue;
+            }
+
+            result = block;
+        }
+
+        return result;
+    }
+
+
 }

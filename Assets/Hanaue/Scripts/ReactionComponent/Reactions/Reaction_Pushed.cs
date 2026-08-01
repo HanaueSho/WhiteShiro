@@ -12,6 +12,13 @@ public class Reaction_Pushed : ReactionComponent
     private Vector3 _moveDirection;
     private Reaction_Follow _upReactionFollow; // 上部のリアクション参照
     private Reaction_Pushed _forwardReactionPushed; // 正面のリアクション参照
+    private Transform _originParent;
+
+    private void Start()
+    {
+        _originParent = transform.parent;
+    }
+
 
     // true: 動く, false: 動かない
     public override bool Enter(Block influencer, CommandComponent command)
@@ -74,7 +81,7 @@ public class Reaction_Pushed : ReactionComponent
         base.Exit(influencer);
 
         // 親子関係設定を切る
-        transform.SetParent(null, true);
+        transform.SetParent(_originParent, true);
 
         // 重力処理
         if (GetComponent<Reaction_Gravity>() is Reaction_Gravity gravity)
