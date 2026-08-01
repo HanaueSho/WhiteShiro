@@ -8,6 +8,10 @@ using UnityEngine;
 
 public class Reaction_Goal : ReactionComponent
 {
-
+    public override bool Enter(Block influencer, CommandComponent command)
+    {
+        // ここでクリアを通知
+        return base.Enter(influencer, command);
+    }
 
 }

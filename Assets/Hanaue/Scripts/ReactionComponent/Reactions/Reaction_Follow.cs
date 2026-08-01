@@ -5,6 +5,7 @@
 */
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static UnityEngine.UI.GridLayoutGroup;
 
 public class Reaction_Follow : ReactionComponent
@@ -23,24 +24,16 @@ public class Reaction_Follow : ReactionComponent
         // ----- 親子関係設定 -----
         // influencer の正面方向をチェック
         Vector3 moveDirection = ((Command_Move)command)?.MoveDirection ?? Vector3.zero;
+
         // ブロックチェック
-        Block block = null;
-        if (Physics.Raycast(transform.position, moveDirection, out RaycastHit hit, 1.0f))
+        Block moveDirectionBlock = GetComponent<Block>().GetBlock(moveDirection, true);
+        if (moveDirectionBlock?.GetComponent<Reaction_Pushed>()?.Enter(influencer, command) ?? false)
         {
-            if (hit.transform.GetComponent<Block>())
-            {
-                block = hit.transform.GetComponent<Block>();
-            }
-            if (hit.transform.GetComponent<Reaction_Pushed>())
-            {
-                // 移動方向が Pushed なら平気
-                if (hit.transform.GetComponent<Reaction_Pushed>().Enter(influencer, command))
-                {
-                    block = null;
-                }
-            }
+            // 押して動けるので null
+            moveDirectionBlock = null;
         }
-        if (block == null)
+
+        if (moveDirectionBlock == null)
         {
             transform.SetParent(influencer.transform, true);
 
