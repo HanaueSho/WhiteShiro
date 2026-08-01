@@ -1,12 +1,12 @@
 ﻿/*
-    CommandMoveForward.cs
+    Command_Move_Forward.cs
     20260728  arai eito
     コマンド前方移動
 */
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Command_MoveForward", menuName = "Scriptable Objects/Command/MoveForward")]
-public class Command_MoveForward : Command_Move
+[CreateAssetMenu(fileName = "Command_Move_Forward", menuName = "Scriptable Objects/Command/Move_Forward")]
+public class Command_Move_Forward : Command_Move
 {
     // ==================================================
     // ----- Unity Event -----
