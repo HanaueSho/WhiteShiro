@@ -16,6 +16,11 @@ public class Command_For : Command_While
     private int _forMax = 3;
 
     // ==================================================
+    // ----- Public Propaty -----
+    // ==================================================
+    public void SetForMax(int value) { _forMax = value; }
+
+    // ==================================================
     // ----- Unity Event -----
     // ==================================================
     private void OnEnable()
