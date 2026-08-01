@@ -23,7 +23,8 @@ public class ScenePlayer : MonoBehaviour
         Player = 0,
         SubPlayer,
         Gimmic,
-        Default
+        Default,
+        NoPlay
     }
 
     // ==================================================

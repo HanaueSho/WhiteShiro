@@ -15,8 +15,6 @@ public class CommandComponent : ScriptableObject
     // ----- Propaty -----
     // ==================================================
     protected string _visualText;
-    protected ReactionComponent _forwardReaction; // 前方のリアクション参照
-    protected ReactionComponent _upReaction; // 上部のリアクション参照
 
     // ==================================================
     // ----- Public Propaty -----

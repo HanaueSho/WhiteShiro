@@ -5,6 +5,7 @@
 */
 using System.Collections;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class Reaction_Pushed : ReactionComponent
 {
@@ -13,15 +14,13 @@ public class Reaction_Pushed : ReactionComponent
     private Reaction_Pushed _forwardReactionPushed; // 正面のリアクション参照
 
     // true: 動く, false: 動かない
-    public override bool Enter(Block influencer)
+    public override bool Enter(Block influencer, CommandComponent command)
     {
-        base.Enter(influencer);
-
         // 初期化
         _forwardReactionPushed = null;
 
         // influencer の正面方向へ移動する
-        _moveDirection = influencer.transform.forward;
+        _moveDirection = ((Command_Move)command).MoveDirection;
 
         bool result = true;
         // ブロックチェック
@@ -38,7 +37,7 @@ public class Reaction_Pushed : ReactionComponent
             {
                 // 移動方向が Pushed なら呼ぶ
                 _forwardReactionPushed = hit.transform.GetComponent<Reaction_Pushed>();
-                result = _forwardReactionPushed.Enter(influencer);
+                result = _forwardReactionPushed.Enter(influencer, command);
             }
         }
         if (result)
@@ -48,9 +47,13 @@ public class Reaction_Pushed : ReactionComponent
 
         // ----- 上部確認 ------
         _upReactionFollow = null; // 初期化
-        Block upBlock = GetComponent<Block>().GetUpBlock();
+        Block upBlock = GetComponent<Block>().GetUpBlock(true);
         _upReactionFollow = upBlock?.GetComponent<Reaction_Follow>();
-        _upReactionFollow?.Enter(influencer);
+        _upReactionFollow?.Enter(influencer, command);
+
+        // ----- Button Exit -----
+        Block downBlock = GetComponent<Block>().GetDownBlock(true);
+        downBlock?.GetComponent<Reaction_Button>()?.Exit(GetComponent<Block>());
 
         return result;
     }
@@ -82,5 +85,9 @@ public class Reaction_Pushed : ReactionComponent
         // ----- 上部リアクション -----
         _upReactionFollow?.Exit(influencer);
         _forwardReactionPushed?.Exit(influencer);
+
+        // ----- Button Enter -----
+        Block downBlock = GetComponent<Block>().GetDownBlock(true);
+        downBlock?.GetComponent<Reaction_Button>()?.Enter(GetComponent<Block>(), null);
     }
 }
