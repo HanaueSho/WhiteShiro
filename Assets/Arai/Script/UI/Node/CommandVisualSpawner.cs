@@ -40,12 +40,12 @@ public class CommandVisualSpawner : UI_Base, IBeginDragHandler, IDragHandler, IE
 
 
         RectTransformUtility.ScreenPointToWorldPointInRectangle(
-            RectTransform,
+            _dragNode.RectTransform,
             eventData.position,
             null,
-            out Vector3 worldPos);
+            out Vector3 position);
 
-        _dragNode.RectTransform.position = worldPos;
+        _dragNode.RectTransform.position = position;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -56,12 +56,12 @@ public class CommandVisualSpawner : UI_Base, IBeginDragHandler, IDragHandler, IE
         }
 
         RectTransformUtility.ScreenPointToWorldPointInRectangle(
-            RectTransform,
+            _dragNode.RectTransform,
             eventData.position,
             null,
-            out Vector3 worldPos);
+            out Vector3 position);
 
-        _dragNode.RectTransform.position = worldPos;
+        _dragNode.RectTransform.position = position;
     }
 
     public void OnEndDrag(PointerEventData eventData)

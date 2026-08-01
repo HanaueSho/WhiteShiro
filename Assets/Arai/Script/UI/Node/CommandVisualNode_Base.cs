@@ -15,7 +15,6 @@ public class CommandVisualNode_Base : UI_Base , IInitializePotentialDragHandler,
     // ----- UI Propaty -----
     // ==================================================
     [SerializeField] private Text _nameText;
-    [SerializeField] private Image _baseImage;
 
     [SerializeField] private RectTransform _skinRectTransform;
 
@@ -96,19 +95,6 @@ public class CommandVisualNode_Base : UI_Base , IInitializePotentialDragHandler,
         {
             transform.position = position;
         }
-    }
-
-    // ==================================================
-    // ----- Public Event -----
-    // ==================================================
-    public void SetColor(Color color)
-    {
-        if (_baseImage == null)
-        {
-            return;
-        }
-
-        _baseImage.color = color;
     }
 
 
