@@ -5,6 +5,7 @@
 */
 using System.Collections;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class Reaction_Pushed : ReactionComponent
 {
@@ -50,6 +51,10 @@ public class Reaction_Pushed : ReactionComponent
         _upReactionFollow = upBlock?.GetComponent<Reaction_Follow>();
         _upReactionFollow?.Enter(influencer, command);
 
+        // ----- Button Exit -----
+        Block downBlock = GetComponent<Block>().GetDownBlock(true);
+        downBlock?.GetComponent<Reaction_Button>()?.Exit(GetComponent<Block>());
+
         return result;
     }
 
@@ -80,5 +85,9 @@ public class Reaction_Pushed : ReactionComponent
         // ----- 上部リアクション -----
         _upReactionFollow?.Exit(influencer);
         _forwardReactionPushed?.Exit(influencer);
+
+        // ----- Button Enter -----
+        Block downBlock = GetComponent<Block>().GetDownBlock(true);
+        downBlock?.GetComponent<Reaction_Button>()?.Enter(GetComponent<Block>(), null);
     }
 }

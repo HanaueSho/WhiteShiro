@@ -55,6 +55,10 @@ public class Reaction_Gravity : ReactionComponent
             transform.position = _targetPosition;
         }
 
+        // ----- Button Enter -----
+        Block downBlock = GetComponent<Block>().GetDownBlock(true);
+        downBlock?.GetComponent<Reaction_Button>()?.Enter(GetComponent<Block>(), null);
+
         yield break;
     }
     public override void Exit(Block influencer)
@@ -63,7 +67,7 @@ public class Reaction_Gravity : ReactionComponent
 
         // 重力処理
         Enter(influencer);
-        
+
     }
     
     public IEnumerator CheckUpBlockReactionGravity()
@@ -80,6 +84,7 @@ public class Reaction_Gravity : ReactionComponent
             // 自分の頭の上に重力持ちがいるなら落下
             StartCoroutine(gravity.CheckUpBlockReactionGravity());
         }
+
 
         yield break;
     }
