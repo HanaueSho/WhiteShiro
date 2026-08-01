@@ -10,6 +10,13 @@ using static UnityEngine.UI.GridLayoutGroup;
 public class Reaction_Follow : ReactionComponent
 {
     private Reaction_Follow _upReactionFollow; // 上部のリアクション参照
+    private Transform _originParent;
+
+    private void Start()
+    {
+        _originParent = transform.parent;
+    }
+
 
     public override bool Enter(Block influencer, CommandComponent command)
     {
@@ -66,7 +73,7 @@ public class Reaction_Follow : ReactionComponent
         base.Exit(influencer);
 
         // 親子関係設定を切る
-        transform.SetParent(null, true);
+        transform.SetParent(_originParent, true);
 
         // 重力処理
         if (GetComponent<Reaction_Gravity>() is Reaction_Gravity gravity)
