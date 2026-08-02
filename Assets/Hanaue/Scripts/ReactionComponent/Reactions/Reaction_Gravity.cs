@@ -6,7 +6,6 @@
 */
 using System.Collections;
 using UnityEngine;
-using static UnityEngine.UI.GridLayoutGroup;
 
 public class Reaction_Gravity : ReactionComponent
 {
