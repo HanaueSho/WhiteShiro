@@ -34,6 +34,10 @@ public class ScenePlayer : MonoBehaviour
 
     private List<CommandPlayer> _defaults;
 
+    // ==================================================
+    // ----- Priority -----
+    // ==================================================
+    private Coroutine _coroutine = null;
 
     // ==================================================
     // ----- Unity Events -----
@@ -76,7 +80,6 @@ public class ScenePlayer : MonoBehaviour
             newList.Add(player);
         }
     }
-
     public void OnPlay()
     {   
         // Start
@@ -88,11 +91,16 @@ public class ScenePlayer : MonoBehaviour
             }
         }
 
-        StartCoroutine(Play());
+        _coroutine = StartCoroutine(Play());
     }
 
     public void OnRun()
     {
+        if(_coroutine != null)
+        {
+            return;
+        }
+
         // Start
         foreach(var commandPlayerList in _commandPlayers.Values)
         {
@@ -103,7 +111,16 @@ public class ScenePlayer : MonoBehaviour
         }
 
         // Run
-        StartCoroutine(Run());
+        _coroutine = StartCoroutine(Run());
+    }
+
+    public void OnStop()
+    {
+        if(_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+            _coroutine = null;
+        }
     }
 
     // ==================================================
@@ -111,7 +128,7 @@ public class ScenePlayer : MonoBehaviour
     // ==================================================
     private IEnumerator Play()
     {
-        for (int i = 0; i < (int)CommandPlayerPriority.Default; i++)
+        for (int i = 0; i < (int)CommandPlayerPriority.Gimmic; i++)
         {
             CommandPlayerPriority priority = (CommandPlayerPriority)i;
 
@@ -134,9 +151,25 @@ public class ScenePlayer : MonoBehaviour
                 yield return new WaitForSeconds(0.5f);
             }
         }
-        // for(gimmc)
+        
         {
-            //StartCoroutine(gimmic.PlayCommand);
+            CommandPlayerPriority priority = (CommandPlayerPriority.Gimmic);
+
+            if (_commandPlayers.TryGetValue(priority, out var list))
+            {
+
+                // コマンド実行
+                foreach (CommandPlayer player in list)
+                {
+                    if (player == null)
+                    {
+                        // 消去処理いれたいね
+                        continue;
+                    }
+                    // player.PlayCommand();
+                    StartCoroutine(player.PlayCommand());
+                }
+            }
         }
 
         // 0.5 seconds
@@ -182,6 +215,9 @@ public class ScenePlayer : MonoBehaviour
                 }
             }
         } while (isPlaying);
+
+
+        _coroutine = null;
     }
 
 }

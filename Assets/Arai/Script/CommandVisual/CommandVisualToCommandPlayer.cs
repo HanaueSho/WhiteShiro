@@ -13,10 +13,18 @@ public class CommandVisualToCommandPlayer : MonoBehaviour
     // ==================================================
     [SerializeField] private CommandVisual _visual;
     [SerializeField] private CommandPlayer _player;
+    [SerializeField] private bool _playOnAwake;
 
     // ==================================================
     // ----- Public Event -----
     // ==================================================
+    private void Start()
+    {
+        if(_playOnAwake)
+        {
+            VisualToPlayer();
+        }
+    }
     public void VisualToPlayer()
     {
         if(_visual == null || _player == null)
