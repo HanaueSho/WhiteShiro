@@ -35,9 +35,11 @@ public class ScenePlayer : MonoBehaviour
     private List<CommandPlayer> _defaults;
 
     // ==================================================
-    // ----- Priority -----
+    // ----- Propaty -----
     // ==================================================
     private Coroutine _coroutine = null;
+    [Header("コルーチンの合間の時間")]
+    [SerializeField] private float _waitForSecond = 0.5f; 
 
     // ==================================================
     // ----- Unity Events -----
@@ -148,7 +150,7 @@ public class ScenePlayer : MonoBehaviour
                 }
 
                 // 0.5 seconds
-                yield return new WaitForSeconds(0.5f);
+                yield return new WaitForSeconds(_waitForSecond);
             }
         }
         
@@ -173,7 +175,7 @@ public class ScenePlayer : MonoBehaviour
         }
 
         // 0.5 seconds
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(_waitForSecond);
 
         foreach (CommandPlayer player in _defaults)
         {
