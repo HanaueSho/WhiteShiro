@@ -145,6 +145,7 @@ public class SceneManager_LevelScene : SceneManager_Base
         foreach (var visual in _visuals)
         {
             count += visual.GetNodeCount();
+            count --; // ルートノードは除外
         }
 
         for(float t = 0.0f; t < 1.0f; t+= Time.deltaTime)
