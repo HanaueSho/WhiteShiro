@@ -4,7 +4,10 @@
     レベルエディター
     プレイボタンを押していない状態でも動くようにする
  */
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,7 +15,7 @@ using UnityEngine.InputSystem;
 [ExecuteAlways]
 public class LevelEditor : MonoBehaviour
 {
-
+#if UNITY_EDITOR
     // ==================================================
     // ----- Priority -----
     // ==================================================
@@ -79,5 +82,5 @@ public class LevelEditor : MonoBehaviour
             }
         }
     }
-
+#endif
 }
