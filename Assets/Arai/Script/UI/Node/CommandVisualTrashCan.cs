@@ -7,6 +7,9 @@ using UnityEngine;
 
 public class CommandVisualTrashCan : UI_Base
 {
+    // ==================================================
+    // ----- Public Events -----
+    // ==================================================
     public void DeleteNode(CommandVisualNode_Base node)
     {
         if(node == null || node.Root == node)
