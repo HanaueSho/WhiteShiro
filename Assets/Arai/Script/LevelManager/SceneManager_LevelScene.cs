@@ -24,12 +24,12 @@ public class SceneManager_LevelScene : SceneManager_Base
 
     // ui
     // goal
-    [SerializeField] private Transform _goalResult;
+    [SerializeField] private RectTransform _goalResult;
     [SerializeField] private Text _nodeCountText;
     private bool _isGoal = false;
 
     // game over 
-    [SerializeField] private Transform _gameOverResult;
+    [SerializeField] private RectTransform _gameOverResult;
     private bool _isGameOver = false;
 
 
@@ -125,29 +125,48 @@ public class SceneManager_LevelScene : SceneManager_Base
 
 
 
-        int count = 0;
-        foreach(var visual in _visuals)
-        {
-            count += visual.GetNodeCount();
-        }
-
-        if(_nodeCountText != null)
-        {
-            _nodeCountText.text = count.ToString();
-        }
-
-        Vector3 start = _goalResult.position;
-        Vector3 end = Vector3.zero;
+        Vector2 start = _goalResult.anchoredPosition;
+        Vector2 end = Vector2.zero;
         for(float t = 0.0f; t < 0.7f; t+= Time.deltaTime)
         {
             float value = t / 0.7f;
 
-            _goalResult.position = Vector3.Lerp(start, end, value);
+            _goalResult.anchoredPosition = Vector2.Lerp(start, end, value);
 
             yield return null;
         }
 
-        _goalResult.position = end;
+
+        yield return new WaitForSeconds(1.0f);
+
+
+        // 
+        int count = 0;
+        foreach (var visual in _visuals)
+        {
+            count += visual.GetNodeCount();
+        }
+
+        for(float t = 0.0f; t < 1.0f; t+= Time.deltaTime)
+        {
+            int c = Mathf.FloorToInt( t * count );
+
+            if (_nodeCountText != null)
+            {
+                _nodeCountText.text = c.ToString() + " コ";
+            }
+
+            yield return null;
+        }
+
+        if (_nodeCountText != null)
+        {
+            _nodeCountText.text = count.ToString() + " コ";
+        }
+
+
+
+        _goalResult.anchoredPosition = end;
     }
 
     public void OnGameOver()
@@ -180,18 +199,18 @@ public class SceneManager_LevelScene : SceneManager_Base
             _nodeCountText.text = count.ToString();
         }
 
-        Vector3 start = _gameOverResult.position;
-        Vector3 end = Vector3.zero;
+        Vector2 start = _gameOverResult.anchoredPosition;
+        Vector2 end = Vector2.zero;
         for (float t = 0.0f; t < 0.7f; t += Time.deltaTime)
         {
             float value = t / 0.7f;
 
-            _gameOverResult.position = Vector3.Lerp(start, end, value);
+            _gameOverResult.anchoredPosition = Vector2.Lerp(start, end, value);
 
             yield return null;
         }
 
-        _gameOverResult.position = end;
+        _gameOverResult.anchoredPosition = end;
     }
 
 }
