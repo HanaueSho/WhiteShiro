@@ -1365,6 +1365,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 712293061423668479, guid: 9e4a5567606654543b386e1409d7c9b2, type: 3}
+      propertyPath: _player
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 839404247663276419, guid: 9e4a5567606654543b386e1409d7c9b2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
       value: 5
@@ -1486,6 +1490,7 @@ PrefabInstance:
     - {fileID: 6862966795686298587, guid: 9e4a5567606654543b386e1409d7c9b2, type: 3}
     - {fileID: 1573602530826509729, guid: 9e4a5567606654543b386e1409d7c9b2, type: 3}
     - {fileID: 7638255915961532922, guid: 9e4a5567606654543b386e1409d7c9b2, type: 3}
+    - {fileID: 5947346180126413012, guid: 9e4a5567606654543b386e1409d7c9b2, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 2876642019451037878, guid: 9e4a5567606654543b386e1409d7c9b2, type: 3}
       insertIndex: 1
