@@ -93,7 +93,7 @@ public class Command_While : CommandComponent
         // チェック
         if(commandCount <= 0 || _commandCursor >= commandCount)
         {
-            result(false);
+            result(true);
             yield break;
         }
 
