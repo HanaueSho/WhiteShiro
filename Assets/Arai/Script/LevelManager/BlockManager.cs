@@ -60,7 +60,7 @@ public class BlockManager : MonoBehaviour
     // ==================================================
     public IEnumerator StartAnimation()
     {
-        float oneBlockAnimationTime = 2.0f;
+        float oneBlockAnimationTime = 1.0f;
         float gapTime = 0.07f;
 
         float totalTime = oneBlockAnimationTime + gapTime * _blockInfos.Count;
@@ -92,7 +92,7 @@ public class BlockManager : MonoBehaviour
                 {
                     // 位置
                     b.transform.position = Vector3.Lerp(
-                        _blockInfos[i]._position + Vector3.up * 100,
+                        _blockInfos[i]._position + Vector3.up * 50,
                         _blockInfos[i]._position,
                         time);
                 }

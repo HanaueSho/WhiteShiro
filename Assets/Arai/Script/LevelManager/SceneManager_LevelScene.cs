@@ -34,6 +34,7 @@ public class SceneManager_LevelScene : SceneManager_Base
 
 
     private bool _isCanPlay = true;
+    private bool _isPlaying = false;
 
     // ==================================================
     // ----- Unity Events -----
@@ -57,6 +58,7 @@ public class SceneManager_LevelScene : SceneManager_Base
     }
     private IEnumerator OnResetButtonClickCoroutine()
     {
+        _isPlaying = false;
         _isCanPlay = false;
 
         _player?.OnStop();
@@ -79,10 +81,15 @@ public class SceneManager_LevelScene : SceneManager_Base
     }
     private IEnumerator OnPlayButtonClickCoroutine()
     {
-        yield return OnResetButtonClickCoroutine();
+        if (_isPlaying)
+        {
+            yield return OnResetButtonClickCoroutine();
+            
+        }
 
         yield return new WaitForSeconds(0.5f);
 
+        _isPlaying = true;
         _player?.OnRun();
     }
     public void OnCommandVisibleButtonClick()
