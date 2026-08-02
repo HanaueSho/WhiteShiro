@@ -3,12 +3,21 @@
     20260730  arai eito
     コマンド一覧を入れると自動で見た目を作ってくれる
 */
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
 public class CommandVisual : MonoBehaviour
 {
+
+    // ==================================================
+    // ----- Propaty -----
+    // ==================================================
+    private bool _visible;
+    // canvas group
+    private CanvasGroup _canvasGroup;
+
     // ==================================================
     // ----- Node -----
     // ==================================================
@@ -21,6 +30,7 @@ public class CommandVisual : MonoBehaviour
     // プレイヤー
     private CommandPlayer _commandPlayer;
 
+
     // 関数で使う用
     private CommandVisualNode_Base _beforeNode;
 
@@ -29,6 +39,25 @@ public class CommandVisual : MonoBehaviour
     // ==================================================
     public CommandComponent Root => _root;
     public CommandVisualNode_Base RootVisualNode => _rootVisualNode;
+    public bool Visible { 
+        set 
+        {
+            _visible = value;
+
+            if(_canvasGroup != null)
+            {
+                StartCoroutine(VisibleCoroutine());
+            }
+        } }
+
+
+    // ==================================================
+    // ----- Unity Events -----
+    // ==================================================
+    private void Awake()
+    {
+        _canvasGroup = gameObject.AddComponent<CanvasGroup>();
+    }
 
     // ==================================================
     // ----- Public Events -----
@@ -202,6 +231,35 @@ public class CommandVisual : MonoBehaviour
         // コマンド
         node.IntSetAction = cmdFor.SetForMax;
         node.ParentNode = parentNode;       
+    }
+
+    // ==================================================
+    // ----- Visible Events -----
+    // ==================================================    
+    private IEnumerator VisibleCoroutine()
+    {
+        float time = 0.5f;
+        float start = _visible ? 0.0f : 1.0f;
+        float end = 1.0f - start;
+
+
+        foreach(Transform c in transform)
+        {
+            c.gameObject.SetActive(true);
+        }
+
+        for(float t = 0.0f; t < time; t+= Time.deltaTime)
+        {
+            _canvasGroup.alpha = Mathf.Lerp(start, end, t / time);
+
+            yield return null;
+        }
+        _canvasGroup.alpha = end;
+
+        foreach (Transform c in transform)
+        {
+            c.gameObject.SetActive(_visible);
+        }
     }
 
 
