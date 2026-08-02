@@ -225,7 +225,7 @@ public class SceneManager_LevelScene : SceneManager_Base
 
         yield return new WaitForSeconds(1.0f);
 
-
+        _isGameOver = false;
 
         yield return OnResetButtonClickCoroutine();
     }

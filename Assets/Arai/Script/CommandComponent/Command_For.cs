@@ -32,10 +32,15 @@ public class Command_For : Command_While
     // ==================================================
     // ----- Public Event -----
     // ==================================================
+    public override void Initialize()
+    {
+        base.Initialize();
+        _forCursor = 0;
+    }
+
     public override void Enter(CommandPlayer owner)
     {
         base.Enter(owner);
-        _forCursor = 0;
     }
     protected override bool OnLoopEnd()
     {
