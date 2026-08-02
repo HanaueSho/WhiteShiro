@@ -64,6 +64,9 @@ public class Command_Move : CommandComponent
         // ----- PlayerCharacter Enter -----
         owner.GetComponent<Reaction_PlayerCharacter>()?.Enter(owner.GetComponent<Block>(), null);
 
+        // ----- Animator Moving -----
+        owner.GetComponent<PlayerCharacter_Animator>()?.OnAnimatorMoving(true);
+
     }
 
     public override IEnumerator Command(CommandPlayer owner, Action<bool> result)
@@ -103,6 +106,9 @@ public class Command_Move : CommandComponent
 
     public override IEnumerator Exit(CommandPlayer owner)
     {
+        // ----- Animator Moving -----
+        owner.GetComponent<PlayerCharacter_Animator>()?.OnAnimatorMoving(false);
+
         // 重力適用
         if (owner.GetComponent<Reaction_Gravity>() && owner.GetComponent<Block>())
         {

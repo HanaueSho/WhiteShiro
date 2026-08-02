@@ -20,6 +20,9 @@ public class Reaction_Gravity : ReactionComponent
         Block lowerBlock = GetComponent<Block>().GetLowerBlock(true); // それより下のブロック
         if (downBlock == null && lowerBlock != null)
         {
+            // ----- Animator Moving -----
+            GetComponent<PlayerCharacter_Animator>()?.OnAnimatorFalling(true);
+
             _targetPosition = lowerBlock.transform.position + new Vector3(0.0f, 1.0f, 0.0f);
             StartCoroutine(Reaction(GetComponent<Block>()));
 
@@ -67,6 +70,9 @@ public class Reaction_Gravity : ReactionComponent
 
         // ----- PlayerCharacter Enter -----
         GetComponent<Reaction_PlayerCharacter>()?.Enter(GetComponent<Block>(), null);
+
+        // ----- Animator Moving -----
+        GetComponent<PlayerCharacter_Animator>()?.OnAnimatorFalling(false);
 
         yield break;
     }
