@@ -236,7 +236,7 @@ public class CommandVisual : MonoBehaviour
 
     public int GetNodeCount()
     {
-        var cmds = GetComponentsInChildren<CommandComponent>();
+        var cmds = GetComponentsInChildren<CommandVisualNode_Base>(true);
 
         return cmds.Length;
     }

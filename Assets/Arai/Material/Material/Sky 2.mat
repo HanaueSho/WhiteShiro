@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Sky
+  m_Name: Sky 2
   m_Shader: {fileID: -6465566751694194690, guid: 8213c0c60e065f2479affba4df62d723, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -51,11 +51,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Power: 17.61
+    - _Power: 0.73
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _CloudColor: {r: 0, g: 1, b: 0.33329922, a: 1}
+    - _CloudColor: {r: 1, g: 0.30854464, b: 0, a: 1}
     - _Color: {r: 0, g: 0.41679978, b: 1, a: 1}
     - _UpColor: {r: 0, g: 0.8450007, b: 1, a: 1}
   m_BuildTextureStacks: []
