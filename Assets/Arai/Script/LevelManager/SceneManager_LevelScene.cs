@@ -112,7 +112,7 @@ public class SceneManager_LevelScene : SceneManager_Base
         {
             return;
         }
-        _isGoal = true;
+        _isGoal = true; _isGameOver = true;
 
 
         _player?.OnStop();
@@ -175,7 +175,7 @@ public class SceneManager_LevelScene : SceneManager_Base
         {
             return;
         }
-        _isGameOver = true;
+        _isGoal = true; _isGameOver = true;
 
 
         _player?.OnStop();
