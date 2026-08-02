@@ -14,6 +14,7 @@ public class Command_Move : CommandComponent
     // ==================================================
     protected ReactionComponent _moveDirectionReaction; // 進む方向のリアクション参照
     protected ReactionComponent _upReaction; // 上部のリアクション参照
+    protected Reaction_PlayerCharacter _reactionPlayerCharacter; // プレイヤー用のリアクション
     // 動けるかフラグ
     protected bool _isCanMove = true;
     // 動く方向
@@ -60,6 +61,12 @@ public class Command_Move : CommandComponent
         Block downBlock = owner.GetComponent<Block>().GetDownBlock(true);
         downBlock?.GetComponent<Reaction_Button>()?.Exit(owner.GetComponent<Block>());
 
+        // ----- PlayerCharacter Enter -----
+        owner.GetComponent<Reaction_PlayerCharacter>()?.Enter(owner.GetComponent<Block>(), null);
+
+        // ----- Animator Moving -----
+        owner.GetComponent<PlayerCharacter_Animator>()?.OnAnimatorMoving(true);
+
     }
 
     public override IEnumerator Command(CommandPlayer owner, Action<bool> result)
@@ -99,6 +106,9 @@ public class Command_Move : CommandComponent
 
     public override IEnumerator Exit(CommandPlayer owner)
     {
+        // ----- Animator Moving -----
+        owner.GetComponent<PlayerCharacter_Animator>()?.OnAnimatorMoving(false);
+
         // 重力適用
         if (owner.GetComponent<Reaction_Gravity>() && owner.GetComponent<Block>())
         {
@@ -116,6 +126,9 @@ public class Command_Move : CommandComponent
 
         // 初期化
         _moveDirection = Vector3.zero;
+
+        // ----- PlayerCharacter Enter -----
+        owner.GetComponent<Reaction_PlayerCharacter>()?.Enter(owner.GetComponent<Block>(), null);
 
         yield break;
     }

@@ -48,7 +48,7 @@ public class Command_Piston : Command_Move
         {
             _moveDirection = -_moveDirection;
         }
-        Debug.Log("[Debug] Command_Piston");
+        //Debug.Log("[Debug] Command_Piston");
         base.Enter(owner);
 
         // 動けるなら切り替える

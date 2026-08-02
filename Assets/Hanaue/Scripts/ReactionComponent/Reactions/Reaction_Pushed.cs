@@ -5,6 +5,7 @@
 */
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static UnityEngine.UI.GridLayoutGroup;
 
 public class Reaction_Pushed : ReactionComponent
@@ -31,22 +32,19 @@ public class Reaction_Pushed : ReactionComponent
 
         bool result = true;
         // ブロックチェック
-        Block block = null;
-        if (Physics.Raycast(transform.position, _moveDirection, out RaycastHit hit, 1.0f))
+        Block moveDirectionBlock = GetComponent<Block>().GetBlock(_moveDirection, true);
+        if (moveDirectionBlock != null)
         {
-            if (hit.transform.GetComponent<Block>())
-            {
-                // 移動方向にブロックがあるので動かない
-                block = hit.transform.GetComponent<Block>();
-                result = false;
-            }
-            if (hit.transform.GetComponent<Reaction_Pushed>())
-            {
-                // 移動方向が Pushed なら呼ぶ
-                _forwardReactionPushed = hit.transform.GetComponent<Reaction_Pushed>();
-                result = _forwardReactionPushed.Enter(influencer, command);
-            }
+            // 移動方向にブロックがあるので動かない
+            result = false;
         }
+        if (moveDirectionBlock?.GetComponent<Reaction_Pushed>()?.Enter(influencer, command) ?? false)
+        {
+            // 移動方向が Pushed なら呼ぶ
+            _forwardReactionPushed = moveDirectionBlock.GetComponent<Reaction_Pushed>();
+            result = _forwardReactionPushed.Enter(influencer, command);
+        }
+
         if (result)
         {
             transform.SetParent(influencer.transform, true);

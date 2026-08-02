@@ -14,6 +14,7 @@ public class Reaction_PlayerCharacter : ReactionComponent
 
     public override bool Enter(Block influencer, CommandComponent command)
     {
+        //Debug.Log("[Debug] Reaction_PlayerCharacter Enter");
         // ゴールチェック
         CheckGoal();
         // ノータッチチェック
@@ -44,8 +45,13 @@ public class Reaction_PlayerCharacter : ReactionComponent
             {
                 continue;
             }
+            if (block.GetComponent<Reaction_NoTouch>() == null)
+            {
+                continue;
+            }
 
             block.GetComponent<Reaction_NoTouch>()?.Enter(GetComponent<Block>(), null);
+            Debug.Log("[Debug] DONT TOUCH!!!!!!!!!!!!!!!");
             return true;
         }
 
@@ -54,14 +60,19 @@ public class Reaction_PlayerCharacter : ReactionComponent
 
     private bool CheckGoal()
     {
-        // 同じ座標のブロック取得
-        Block block = GetComponent<Block>().GetBlockOnSameGrid();
+        // 足元のブロック取得
+        Block block = GetComponent<Block>().GetDownBlock(true);
 
+        // Reaction_Goal か判定
         if (block != null)
         {
-            // Enter を呼ぶ
-            block.GetComponent<Reaction_Goal>()?.Enter(GetComponent<Block>(), null);
-            return true;
+            if (block.GetComponent<Reaction_Goal>())
+            {
+                // Enter を呼ぶ
+                block.GetComponent<Reaction_Goal>()?.Enter(GetComponent<Block>(), null);
+                Debug.Log("[Debug] Get Goal!!!!!!!!!!!!!!!");
+                return true;
+            }
         }
 
         return false;
