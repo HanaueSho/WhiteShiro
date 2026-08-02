@@ -178,7 +178,7 @@ public class SceneManager_LevelScene : SceneManager_Base
     }
 
     public void OnGameOver()
-    {
+    {        
         if(_isGameOver == true)
         {
             return;
@@ -196,16 +196,6 @@ public class SceneManager_LevelScene : SceneManager_Base
 
 
 
-        int count = 0;
-        foreach (var visual in _visuals)
-        {
-            count += visual.GetNodeCount();
-        }
-
-        if (_nodeCountText != null)
-        {
-            _nodeCountText.text = count.ToString();
-        }
 
         Vector2 start = _gameOverResult.anchoredPosition;
         Vector2 end = Vector2.zero;
@@ -217,8 +207,27 @@ public class SceneManager_LevelScene : SceneManager_Base
 
             yield return null;
         }
-
         _gameOverResult.anchoredPosition = end;
+
+        yield return new WaitForSeconds(0.5f);
+
+
+        for (float t = 0.0f; t < 0.7f; t += Time.deltaTime)
+        {
+            float value = t / 0.7f;
+
+            _gameOverResult.anchoredPosition = Vector2.Lerp(end ,start, value);
+
+            yield return null;
+        }
+
+        _gameOverResult.anchoredPosition = start;
+
+        yield return new WaitForSeconds(1.0f);
+
+
+
+        yield return OnResetButtonClickCoroutine();
     }
 
 }
