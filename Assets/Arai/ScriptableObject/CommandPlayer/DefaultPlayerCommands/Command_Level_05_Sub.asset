@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44673bfc236beb44193c47c5128662d9, type: 3}
-  m_Name: Command_For_Default
-  m_EditorClassIdentifier: Assembly-CSharp::Command_For
+  m_Script: {fileID: 11500000, guid: 995e418f82271d84582f925591957848, type: 3}
+  m_Name: Command_Level_05_Sub
+  m_EditorClassIdentifier: Assembly-CSharp::Command_ForOnce
   _inCommands:
-  - {fileID: 11400000, guid: 62eb48ac5d830ad4bb54c9fc12efb15a, type: 2}
-  _forMax: 3
+  - {fileID: 11400000, guid: 38ba92e9b841acd42882488e85e594f9, type: 2}

@@ -13,6 +13,7 @@ public class Command_For : Command_While
     // ----- Propaty -----
     // ==================================================
     private int _forCursor;
+    [SerializeField]
     private int _forMax = 3;
 
     // ==================================================
@@ -31,6 +32,11 @@ public class Command_For : Command_While
     // ==================================================
     // ----- Public Event -----
     // ==================================================
+    public override void Enter(CommandPlayer owner)
+    {
+        base.Enter(owner);
+        _forCursor = 0;
+    }
     protected override bool OnLoopEnd()
     {
         _forCursor++;
