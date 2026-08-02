@@ -233,6 +233,14 @@ public class CommandVisual : MonoBehaviour
         node.ParentNode = parentNode;       
     }
 
+
+    public int GetNodeCount()
+    {
+        var cmds = GetComponentsInChildren<CommandComponent>();
+
+        return cmds.Length;
+    }
+
     // ==================================================
     // ----- Visible Events -----
     // ==================================================    
