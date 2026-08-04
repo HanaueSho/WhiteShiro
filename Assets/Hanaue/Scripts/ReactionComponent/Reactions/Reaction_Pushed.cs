@@ -24,6 +24,7 @@ public class Reaction_Pushed : ReactionComponent
     // true: 動く, false: 動かない
     public override bool Enter(Block influencer, CommandComponent command)
     {
+        Debug.Log("[Debug] "+ transform.name +  ", influencer: " + influencer.name);
         // 初期化
         _forwardReactionPushed = null;
 
