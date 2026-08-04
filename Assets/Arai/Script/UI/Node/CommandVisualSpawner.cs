@@ -36,8 +36,7 @@ public class CommandVisualSpawner : UI_Base, IBeginDragHandler, IDragHandler, IE
         }
 
         // 親
-        _dragNode.transform.SetParent(transform,true);
-
+        _dragNode.transform.SetParent(transform,false);
 
         RectTransformUtility.ScreenPointToWorldPointInRectangle(
             _dragNode.RectTransform,

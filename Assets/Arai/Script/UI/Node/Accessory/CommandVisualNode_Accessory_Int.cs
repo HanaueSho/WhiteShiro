@@ -63,10 +63,10 @@ public class CommandVisualNode_Accessory_Int : UI_Base
 
         if(_parentNode != null)
         {
-            position.x = 
-                _parentNode.transform.position.x + 
-                (- _parentNode.RectTransform.sizeDelta.x + RectTransform.sizeDelta.x) * 0.5f +
-                _offset.x;
+            position.x =
+                _parentNode.transform.position.x +
+                _parentNode.RectTransform.sizeDelta.x * 0.5f * _parentNode.RectTransform.lossyScale.x +
+                RectTransform.sizeDelta.x * 0.5f * RectTransform.lossyScale.x;
 
 
             position.y = _parentNode.transform.position.y + _offset.y;

@@ -116,7 +116,8 @@ public class CommandVisual : MonoBehaviour
         }
 
         // 親
-        node.transform.SetParent(parent);
+        node.transform.SetParent(parent, false);
+        node.transform.position = parent.transform.position;
 
         // インデント調整
         node.Indent = parentNode?.Indent + 1 ?? -1;
