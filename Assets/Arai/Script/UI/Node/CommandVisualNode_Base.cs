@@ -80,7 +80,7 @@ public class CommandVisualNode_Base : UI_Base , IInitializePotentialDragHandler,
         {
             RectTransform rect = _beforeNode.RectTransform;
             
-            position.y = rect.position.y - rect.sizeDelta.y;
+            position.y = rect.position.y - rect.sizeDelta.y * rect.lossyScale.y;
         }
 
 
