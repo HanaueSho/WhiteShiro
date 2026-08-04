@@ -11,6 +11,7 @@ using static UnityEngine.UI.GridLayoutGroup;
 public class Reaction_Follow : ReactionComponent
 {
     private Reaction_Follow _upReactionFollow; // 上部のリアクション参照
+    private Reaction_Pushed _forwardReactionPushed; // 正面のリアクション参照
     private Transform _originParent;
 
     private void Start()
@@ -21,12 +22,16 @@ public class Reaction_Follow : ReactionComponent
 
     public override bool Enter(Block influencer, CommandComponent command)
     {
+        // 初期化
+        _forwardReactionPushed = null;
+
         // ----- 親子関係設定 -----
         // influencer の正面方向をチェック
         Vector3 moveDirection = ((Command_Move)command)?.MoveDirection ?? Vector3.zero;
 
         // ブロックチェック
         Block moveDirectionBlock = GetComponent<Block>().GetBlock(moveDirection, true);
+        _forwardReactionPushed = moveDirectionBlock?.GetComponent<Reaction_Pushed>();
         if (moveDirectionBlock?.GetComponent<Reaction_Pushed>()?.Enter(influencer, command) ?? false)
         {
             // 押して動けるので null
@@ -76,6 +81,7 @@ public class Reaction_Follow : ReactionComponent
 
         // ----- 上部リアクション -----
         _upReactionFollow?.Exit(influencer);
+        _forwardReactionPushed?.Exit(influencer);
 
         // ----- Button Enter -----
         Block downBlock = GetComponent<Block>().GetDownBlock(true);
