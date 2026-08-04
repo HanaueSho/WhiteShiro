@@ -291,19 +291,18 @@ public class CommandVisualNode_Base : UI_Base , IInitializePotentialDragHandler,
             // Transform Parent設定
             inNode.transform.SetParent(cmdWhileNode.transform);
 
-            // Root 設定
-            inNode.Root = anotherNode.Root;
 
             // Whileだったら自分の子どものインデントを変える            
-            SetNodeIndent(inNode);
+            SetNode_Info(inNode);
         }
     }
-    private void SetNodeIndent(CommandVisualNode_Base node)
+    private void SetNode_Info(CommandVisualNode_Base node)
     {
-        if (node == null)
+        if(node == null)
         {
             return;
         }
+
 
         // 親検索
         CommandVisualNode_Base parentNode = node.transform.parent.GetComponentInParent<CommandVisualNode_Base>();
@@ -312,16 +311,20 @@ public class CommandVisualNode_Base : UI_Base , IInitializePotentialDragHandler,
             return;
         }
 
-        // インデント設定
-        node._indent = parentNode?._indent + 1 ?? -1;
+        // データ設定
+        if(parentNode != null)
+        {
+            node._indent = parentNode._indent + 1 ;
+            node.Root = parentNode.Root;
+        }
 
-        // 子インデント設定
+        // 子データ設定
         foreach (Transform child in node.transform)
         {
             var childNode = child.GetComponent<CommandVisualNode_Base>();
             if (childNode != null)
             {
-                SetNodeIndent(childNode);
+                SetNode_Info(childNode);
             }
         }
     }
